@@ -693,6 +693,20 @@ Speaker notes:
 
 ---
 
+# What became normal?
+
+<div class="punchline">The runtime became something you ship, not something you find.</div>
+
+<!--
+Speaker notes:
+- Platform era takeaway. This is the deployment consequence of everything on the last two slides.
+- No machine-wide install, no GAC, no "what does the server have." The version is pinned per app, and two apps on one box can target two runtimes.
+- Tie it back to the constraint from the section opener: side-by-side was the thing Framework could not do, and it is the reason this was a rebuild rather than an extension.
+- Transition: the platform stopped making assumptions about the machine. C# 7 starts making the code's own shape more visible.
+-->
+
+---
+
 # C# 7 made shape more visible
 
 ```csharp
