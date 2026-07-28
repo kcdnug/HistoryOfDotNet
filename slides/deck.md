@@ -1094,6 +1094,20 @@ Speaker notes:
 
 # Raw strings made text less hostile
 
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
+
+```csharp
+var json = @"{
+  ""name"": ""Ada"",
+  ""role"": ""Engineer""
+}";
+```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
 ```csharp
 var json = """
 {
@@ -1102,29 +1116,55 @@ var json = """
 }
 """;
 ```
+</div>
+</div>
 
 <!--
 Speaker notes:
-- This is a practical applause feature.
-- Great for JSON, SQL, regex-ish content, and generated snippets.
+- Same JSON on both sides. The only thing that changed is how you tell C# where the string stops.
+- Constraint: a string literal ended at the first `"`, so any quote inside the content had to be escaped — `\"` in a normal literal, or doubled `""` in a verbatim one. JSON, SQL, XML and regex are all quote-dense, so the escaping was worst exactly where you needed it most.
+- Point at the doubled quotes. That is not JSON. You cannot paste that into a linter, and you cannot paste JSON back out without hand-editing every quote.
+- Raw strings pick a delimiter longer than anything in the content, so the content is left alone. Need `"""` inside? Use four quotes to open and close.
+- The closing delimiter also sets the indentation baseline — whitespace to its left is stripped from every line. So inside a method you can indent the literal with the surrounding code and the runtime string is still flush. Verbatim strings could not do that; every line had to start at column zero or the leading spaces ended up in your JSON.
+- This is a practical applause feature. Great for JSON, SQL, regex-ish content, and generated snippets.
 -->
 
 ---
 
 # Generic math opened new libraries
 
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
+
 ```csharp
-static T Add<T>(T left, T right)
-    where T : INumber<T>
-{
-    return left + right;
-}
+static int Add(int x, int y)
+    => x + y;
+
+static double Add(double x, double y)
+    => x + y;
+
+// ...and long, decimal, float, byte
 ```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
+```csharp
+static T Add<T>(T x, T y)
+    where T : INumber<T>
+    => x + y;
+```
+</div>
+</div>
 
 <!--
 Speaker notes:
-- This is less everyday app code, but huge for library authors.
-- It shows the type system getting more expressive.
+- Same operation on both sides: add two numbers, whatever kind of number they are.
+- Constraint: `+` is a static operator, and before C# 11 an interface could not declare a static abstract member. So there was no way to say "T is a type that has a +". Constraints could demand a base class or an interface with instance methods — nothing that reached operators.
+- That left three bad options: one overload per numeric type, `dynamic` (slow, and unchecked until runtime), or convert everything to `double` and quietly lose decimal precision. Money code chose wrong here more than once.
+- The actual feature is static abstract members in interfaces. `INumber<T>` is just the most visible thing built on it.
+- Stay honest: this is library-author territory more than app code. The point for this talk is that the type system got expressive enough to describe a capability, not only a shape.
 -->
 
 ---
@@ -1214,20 +1254,48 @@ Speaker notes:
 
 # Primary constructors shortened simple types
 
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
+
 ```csharp
-public class OrderService(
-    IOrderRepository repository,
-    ILogger<OrderService> logger)
+public class OrderService
 {
-    public Task<Order?> GetAsync(int id) =>
-        repository.GetAsync(id);
+    private readonly IOrderRepo _repo;
+    private readonly ILogger _log;
+
+    public OrderService(
+        IOrderRepo repo, ILogger log)
+    {
+        _repo = repo;
+        _log = log;
+    }
 }
 ```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
+```csharp
+public class OrderService(
+    IOrderRepo repo,
+    ILogger log)
+{
+    // repo and log are in scope
+    // in every member
+}
+```
+</div>
+</div>
 
 <!--
 Speaker notes:
-- This is another ceremony-reduction feature.
-- It also changes how DI-heavy services look.
+- Same class on both sides: two injected dependencies, nothing else.
+- Constraint: every dependency had to be named three times — as a field, as a constructor parameter, and again in the assignment. The compiler had no way to know that a parameter you intend to use later should be captured, so you moved the values across by hand.
+- Count it out loud. Nine of the twelve lines on the left exist only to carry two values from parameters into fields. The right side is the same class with that plumbing deleted.
+- Primary constructor parameters are captured directly, so `repo` is in scope in every member of the type.
+- Honest caveat, and it catches people: on a class the captured parameter is not a readonly field. You can reassign it inside the type and nothing stops you. On a record the parameters become public properties; on a class they do not. Same syntax, different meaning.
+- This is another ceremony-reduction feature, and it changes how DI-heavy services look more than almost anything else in C# 12.
 -->
 
 ---
