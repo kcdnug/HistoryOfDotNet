@@ -1391,6 +1391,29 @@ Speaker notes:
 
 ---
 
+# None of this was free
+
+<div class="timeline-grid">
+<div class="tile"><div class="era">LINQ</div><div class="what">hides an N+1 in plain sight</div></div>
+<div class="tile"><div class="era">async</div><div class="what">colors every method it touches</div></div>
+<div class="tile"><div class="era">Nullable</div><div class="what">warnings you learned to ignore</div></div>
+<div class="tile"><div class="era">AOT</div><div class="what">trimming deletes what it can't see</div></div>
+</div>
+
+<!--
+Speaker notes:
+- Purpose: the deck has been a story of improvement. This is the honesty beat that makes the rest credible.
+- LINQ: deferred execution and per-element allocation are invisible at the call site. Fine until it is a hot path, or an IQueryable quietly doing N+1.
+- async: "async all the way" is not a style preference, it is a constraint. And .Result on an async method is still deadlocking apps.
+- Nullable: annotations are only as good as the discipline around them. The ! operator silences the compiler without changing the runtime, and warning fatigue turns the feature into decoration.
+- AOT and source generators: reflection was never free — it always cost lookup, allocation, and lost inlining. What changed is the guarantee. The compiler can't see a reflective call, so the trimmer removes the type as unused and you find out in production. The cost moved from performance to correctness.
+- Also worth saying: generated code is harder to step through than the reflection it replaced.
+- Do not let this become a complaint. Framing: these are the bills that came with genuinely better defaults, and every one is worth paying.
+- Transition: which is exactly why this is a history of defaults, not features.
+-->
+
+---
+
 # The real history of .NET
 
 <div class="punchline">Not just new features.</div>
