@@ -69,7 +69,7 @@ Speaker notes:
 
 .NET Framework 1.0 / 1.1 + C# 1.x
 
-<div class="big-number">1</div>
+<div class="big-number">2002</div>
 
 <!--
 Speaker notes:
@@ -150,7 +150,7 @@ Speaker notes:
 
 .NET Framework 2.0 + C# 2.0
 
-<div class="big-number">2</div>
+<div class="big-number">2005</div>
 
 <!--
 Speaker notes:
@@ -279,7 +279,7 @@ Speaker notes:
 
 .NET Framework 3.0 / 3.5 + C# 3.0
 
-<div class="big-number">3</div>
+<div class="big-number">2006</div>
 
 <!--
 Speaker notes:
@@ -412,7 +412,7 @@ Speaker notes:
 
 .NET Framework 4 / 4.5 + C# 4 / 5
 
-<div class="big-number">4.5</div>
+<div class="big-number">2010</div>
 
 <!--
 Speaker notes:
@@ -543,7 +543,7 @@ Speaker notes:
 
 Roslyn + C# 6
 
-<div class="big-number">6</div>
+<div class="big-number">2015</div>
 
 <!--
 Speaker notes:
@@ -614,7 +614,7 @@ Speaker notes:
 
 .NET Core 1.0–3.1 + C# 7 / 8
 
-<div class="big-number">Core</div>
+<div class="big-number">2016</div>
 
 <!--
 Speaker notes:
@@ -734,7 +734,7 @@ Speaker notes:
 
 .NET Core 3.x + C# 8
 
-<div class="big-number">8</div>
+<div class="big-number">2019</div>
 
 <!--
 Speaker notes:
@@ -824,7 +824,7 @@ Speaker notes:
 
 .NET 5 + C# 9
 
-<div class="big-number">9</div>
+<div class="big-number">2020</div>
 
 <!--
 Speaker notes:
@@ -887,7 +887,7 @@ Speaker notes:
 
 .NET 6 + C# 10
 
-<div class="big-number">6</div>
+<div class="big-number">2021</div>
 
 <!--
 Speaker notes:
@@ -996,7 +996,7 @@ Speaker notes:
 
 .NET 7 + C# 11
 
-<div class="big-number">11</div>
+<div class="big-number">2022</div>
 
 <!--
 Speaker notes:
@@ -1096,7 +1096,7 @@ Speaker notes:
 
 .NET 8 + C# 12
 
-<div class="big-number">8</div>
+<div class="big-number">2023</div>
 
 <!--
 Speaker notes:
@@ -1215,7 +1215,7 @@ Speaker notes:
 
 .NET 9 / 10 + C# 13 / 14
 
-<div class="big-number">9/10</div>
+<div class="big-number">2024</div>
 
 <!--
 Speaker notes:
@@ -1269,7 +1269,7 @@ Speaker notes:
 
 .NET 11 preview + C# 15
 
-<div class="big-number">15</div>
+<div class="big-number">2026</div>
 
 <!--
 Speaker notes:

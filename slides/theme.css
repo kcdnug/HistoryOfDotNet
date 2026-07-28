@@ -70,9 +70,10 @@ footer {
   position: absolute;
   right: 60px;
   bottom: 28px;
-  font-size: 180px;
+  font-size: 120px;
   color: rgba(87,214,255,.10);
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .columns {
