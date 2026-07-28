@@ -127,6 +127,8 @@ Customer customer = (Customer)customers[0];
 Speaker notes:
 - This is the “cast-and-pray” era.
 - The collection couldn't communicate intent. The compiler couldn't help.
+- Constraint: generics didn't exist in the runtime yet. The only type-safe alternative was hand-writing a collection class per type — `CustomerCollection : CollectionBase` with typed `Add`, `Item`, `Insert` — repeated for every domain type. Some shops generated them.
+- So `ArrayList` wasn't laziness. It was the cheaper of two bad options.
 - Transition: .NET 2 changes that.
 -->
 
@@ -438,23 +440,32 @@ Speaker notes:
 
 ---
 
-# Before async/await: callbacks and continuations
+# Before async/await
 
 ```csharp
-client.GetStringAsync(url)
-    .ContinueWith(t =>
+var request = WebRequest.Create(orderUrl);
+
+request.BeginGetResponse(ar1 =>
+{
+    var order = ReadOrder(request.EndGetResponse(ar1));
+    var next = WebRequest.Create(CustomerUrl(order));
+
+    next.BeginGetResponse(ar2 =>
     {
-        if (t.IsFaulted)
-            Log(t.Exception);
-        else
-            UpdateUi(t.Result);
-    }, TaskScheduler.FromCurrentSynchronizationContext());
+        var customer = ReadCustomer(next.EndGetResponse(ar2));
+        uiContext.Post(_ => UpdateUi(order, customer), null);
+    }, null);
+}, null);
 ```
 
 <!--
 Speaker notes:
-- This is a simplified example, but familiar.
-- Error handling, context, and flow all get tangled.
+- Two sequential calls: the second URL depends on the first result. That dependency is what forces the nesting.
+- Constraint: without a compiler-generated state machine, control flow couldn't cross an asynchronous boundary. No `try`/`catch`, no `using`, no `foreach`, no `if` spanning the wait — any state had to be carried by hand into the callback.
+- Ask where the error handling is. There isn't any, and you can't add it: a `try` around `BeginGetResponse` returns before the work happens, so it catches nothing. Each callback needed its own.
+- Point at `uiContext.Post`: marshaling back to the UI thread was manual. `await` later did this for free.
+- Callback pyramids weren't a style choice. A loop containing a wait was the thing you couldn't express — it needed recursion.
+- `ReadOrder` / `ReadCustomer` hide the stream and `using` plumbing. The real code was worse than this.
 -->
 
 ---
@@ -464,8 +475,10 @@ Speaker notes:
 ```csharp
 try
 {
-    string json = await client.GetStringAsync(url);
-    UpdateUi(json);
+    Order order = Parse(await client.GetStringAsync(orderUrl));
+    Customer customer = Parse(await client.GetStringAsync(CustomerUrl(order)));
+
+    UpdateUi(order, customer);
 }
 catch (HttpRequestException ex)
 {
@@ -475,8 +488,11 @@ catch (HttpRequestException ex)
 
 <!--
 Speaker notes:
-- The code reads like normal control flow.
-- But the scalability and responsiveness model is different.
+- Same two calls, same dependency between them. The nesting is gone.
+- One `try`/`catch` now covers both operations, because the compiler rewrote the method into a state machine.
+- No manual marshaling back to the UI thread — the synchronization context is captured for you.
+- The code reads like normal control flow. But the scalability and responsiveness model is different.
+- Add a third step and the old version grows another nesting level; this one grows one line.
 -->
 
 ---
@@ -636,6 +652,9 @@ Speaker notes:
 Speaker notes:
 - Many people in the room may have entered .NET during this era.
 - For older .NET developers, this was a major identity shift.
+- Constraint: Framework installed machine-wide, one version at a time, upgraded in place, on a cadence tied to Windows itself. `System.Web` was welded to IIS.
+- The consequence that forced the rewrite: two apps on one machine could not target two versions. Side-by-side was architecturally impossible, and cloud deployment made that fatal.
+- So this was a rebuild, not an extension. Mono and Xamarin had already proven a portable runtime was feasible.
 -->
 
 ---
@@ -706,6 +725,7 @@ if (shape is Circle)
 <!--
 Speaker notes:
 - Again, old code is not bad; it is simply mechanical.
+- Constraint: the type test and the cast couldn't be a single expression, so the type had to be named twice and the runtime re-checked what the `if` had already proven.
 -->
 
 ---
@@ -850,6 +870,8 @@ public class CustomerSummary
 Speaker notes:
 - You don't need to show a full equality implementation. The comment is enough.
 - The point is ceremony and mutability by default.
+- Constraint: value equality, non-destructive copying, and practical immutability all had to be written by hand, on every type that needed them.
+- And `GetHashCode` has to stay consistent with `Equals` or dictionaries and sets quietly misbehave. That's easy to get wrong, so most teams skipped it and lived with reference equality.
 -->
 
 ---
@@ -919,6 +941,9 @@ public class Startup
 Speaker notes:
 - Acknowledge this pattern was powerful and still appropriate for many apps.
 - But for many services, it was more ceremony than signal.
+- Constraint: C# had no top-level statements until 9, so every entry point needed a class with methods. The host found `Startup` by reflection over a naming convention.
+- The `ConfigureServices` / `Configure` split is a real two-phase bootstrap: register services, then build the pipeline from the built container.
+- Minimal APIs removed the two methods, not the two phases. Worth saying — it keeps this from sounding like the old pattern was pointless.
 -->
 
 ---
