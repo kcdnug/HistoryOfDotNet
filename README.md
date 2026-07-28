@@ -10,7 +10,6 @@ This package contains an AI-editable Marp slide deck for the talk **The Code We 
 - `ABSTRACT.md` — title and original abstract.
 - `STYLE-GUIDE.md` — formatting, voice, and edit guidance.
 - `TIMELINE.md` — framework/language chronology and “what became normal” themes.
-- `snippets/` — standalone code samples from the deck.
 - `references.md` — external sources used to confirm current/future-version claims.
 
 ## Recommended workflow
