@@ -6,6 +6,8 @@ footer: The Code We Don't Write Anymore
 ---
 
 <!-- _class: title -->
+<!-- _paginate: false -->
+<!-- _footer: "" -->
 
 # The Code We Don't Write Anymore
 
