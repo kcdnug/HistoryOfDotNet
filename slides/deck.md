@@ -1535,19 +1535,24 @@ Speaker notes:
 
 # The code we don't write anymore
 
-| Era | We stopped writing |
-|---|---|
-| .NET 2 | casts around collections |
-| .NET 3.5 | many manual loops |
-| C# 5 | callback pyramids |
-| .NET Core | Windows-only assumptions |
-| C# 8 | undocumented null assumptions |
-| .NET 6 | startup ceremony |
-| .NET 8+ | some runtime discovery work |
+| Year | Era | We stopped writing |
+|---|---|---|
+| 2005 | .NET 2 | casts around collections |
+| 2007 | .NET 3.5 | many manual loops |
+| 2012 | C# 5 | callback pyramids |
+| 2016 | .NET Core | Windows-only assumptions |
+| 2019 | C# 8 | undocumented null assumptions |
+| 2020 | .NET 5 | hand-written value equality |
+| 2021 | .NET 6 | startup ceremony |
+| 2022 | .NET 7 | escaped quotes and overload walls |
+| 2023 | .NET 8 | runtime discovery and hand-wired constructors |
+| 2025 | .NET 10 | hand-written backing fields |
 
 <!--
 Speaker notes:
-- This is the recap aligned to the title.
+- This is the recap aligned to the title. Slow down and let people read it.
+- Every row points at a slide they just saw, so this is the moment the chronology becomes one picture instead of a sequence.
+- There is deliberately no .NET 9 row. That release refined plenty, but nothing in this deck showed code it retired, and saying that out loud is better than padding the table. It also lands the point from earlier: not every release rewrites our habits.
 - Feel free to add your own examples from consulting/projects.
 -->
 

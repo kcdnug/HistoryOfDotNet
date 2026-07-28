@@ -146,3 +146,19 @@ section.section p { font-size: 30px; color: var(--muted); }
 }
 
 ul.tight li { margin-bottom: 8px; }
+
+/* The imported default theme sets tables to display:block with
+   width:max-content — a GitHub scroll hack that shrink-wraps the table
+   to its content. Restore real table layout so it fills the slide. */
+table {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+  overflow: visible;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th, td { font-size: 22px; padding: 9px 16px; }
+th { color: var(--accent); text-align: left; }
+td:first-child,
+td:nth-child(2) { color: var(--muted); white-space: nowrap; }
