@@ -716,21 +716,35 @@ Speaker notes:
 
 # C# 7 made shape more visible
 
-```csharp
-if (value is Customer customer)
-{
-    Console.WriteLine(customer.Name);
-}
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
 
-var (name, total) = GetCustomerSummary(id);
+```csharp
+Tuple<string, decimal> summary =
+    GetCustomerSummary(id);
+
+string name = summary.Item1;
+decimal total = summary.Item2;
 ```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
+```csharp
+var (name, total) =
+    GetCustomerSummary(id);
+```
+</div>
+</div>
 
 <!--
 Speaker notes:
-- Pattern matching begins here. Both samples on this slide are C# 7 (2017).
-- Tuples make lightweight returns feel normal.
-- Flag the span up front: this three-slide beat crosses two releases. C# 7 opens pattern matching; C# 8 finishes the thought two years later by turning `switch` into an expression.
-- That gap is the argument, not a footnote — intent arrived one release at a time.
+- Same call on both sides: one method handing back two values.
+- Constraint: a method returned one thing. Two values meant `out` parameters, a purpose-built class, or `Tuple<T1, T2>` — and `Tuple` usually won on convenience, which is how `Item1` and `Item2` ended up in production code.
+- Point at `Item1`. The names of those two values existed inside the method that produced them, and were thrown away at the boundary. Every caller then re-invented them.
+- C# 7 tuples carry the names across that boundary, and deconstruction unpacks them in one line. `ValueTuple` is a struct as well, so the allocation went away along with the ceremony.
+- This is the smallest feature in this stretch of the talk and the one people adopted fastest.
 -->
 
 ---
@@ -743,12 +757,25 @@ if (shape is Circle)
     var circle = (Circle)shape;
     return Math.PI * circle.Radius * circle.Radius;
 }
+else if (shape is Rectangle)
+{
+    var rect = (Rectangle)shape;
+    return rect.Width * rect.Height;
+}
+else
+{
+    throw new NotSupportedException();
+}
 ```
 
 <!--
 Speaker notes:
 - Again, old code is not bad; it is simply mechanical.
+- Both sides of this pair handle the same three cases: circle, rectangle, and anything else. That is deliberate — the switch on the next slide should look shorter because it is shorter, not because it is doing less.
 - Constraint: the type test and the cast couldn't be a single expression, so the type had to be named twice and the runtime re-checked what the `if` had already proven.
+- Count the type names before any arithmetic happens: `Circle` twice, `Rectangle` twice. Then a local in each branch that exists only to hold the cast result.
+- The `else` throw is exhaustiveness written by hand. Nothing checked that the ladder covered every shape — miss one and you find out at runtime. Making that the compiler's job is exactly where the unions section at the end is heading.
+- C# 7's immediate answer was the declaration pattern — `if (shape is Circle circle)`. One expression, one type name, no second check. Worth saying out loud, because the next slide jumps past it.
 -->
 
 ---
@@ -766,8 +793,22 @@ return shape switch
 
 <!--
 Speaker notes:
-- Name the version here: the switch expression is C# 8 (2019), two years after the `is` pattern on the previous slides.
+- Name the version here: the switch expression is C# 8 (2019), two years after the declaration pattern C# 7 introduced.
+- That gap is the argument, not a footnote — intent arrived one release at a time.
 - This introduces the path toward modern pattern matching and unions.
+-->
+
+---
+
+# What became normal?
+
+<div class="punchline">We stopped restating what the code already knew.</div>
+
+<!--
+Speaker notes:
+- C# 7 takeaway, and it covers both halves of this beat.
+- The cast named the type a second time the compiler had already proven. `Item1` stood in for a name the producing method already had. Both were the code repeating itself to itself.
+- Transition: C# 8 aims the same idea at null.
 -->
 
 ---
