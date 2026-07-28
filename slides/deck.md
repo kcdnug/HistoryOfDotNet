@@ -1382,16 +1382,59 @@ Speaker notes:
 
 # C# 13 and 14: polish with a direction
 
-- More flexible `params`
-- Better locking patterns
-- Extension members
-- Partial members improvements
+- More flexible `params` <span class="muted">— C# 13</span>
+- Better locking patterns <span class="muted">— C# 13</span>
+- The `field` keyword <span class="muted">— C# 14</span>
+- Extension members <span class="muted">— C# 14</span>
+- Partial members improvements <span class="muted">— both</span>
 - More places for the compiler to understand intent
 
 <!--
 Speaker notes:
-- Keep this high-level unless you want to add concrete samples later.
+- Keep this high-level. The next slide picks one of these and shows it.
 - The narrative is refinement toward expressive APIs.
+- If someone asks why `params` and locking are here: `params` collections mean an API can take a span instead of forcing an array allocation, and `System.Threading.Lock` gives `lock` a real type instead of locking on `object`.
+-->
+
+---
+
+# The `field` keyword ended backing fields
+
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
+
+```csharp
+private string _name;
+
+public string Name
+{
+    get => _name;
+    set => _name = value?.Trim() ?? "";
+}
+```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
+```csharp
+public string Name
+{
+    get;
+    set => field = value?.Trim() ?? "";
+}
+```
+</div>
+</div>
+
+<!--
+Speaker notes:
+- Same property on both sides: trim on the way in, store the result.
+- Constraint: the moment a property needed any logic in either accessor, auto-property syntax was off the table. You declared the backing field yourself, named it by convention, and kept the two in sync by hand.
+- The field was never the interesting part. It existed because there was no way to refer to the storage the compiler was already generating for you.
+- `field` is a contextual keyword inside an accessor body, bound to that generated backing field. Note the `get;` on the right — you can leave one accessor auto and write only the one that needs work.
+- Caveat worth ten seconds: it is contextual, so an existing variable or member actually named `field` shadows it. That is the one migration hazard.
+- Of everything on the previous slide, this is the one most likely to show up in code you write next week.
 -->
 
 ---
