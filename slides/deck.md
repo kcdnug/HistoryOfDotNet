@@ -199,7 +199,7 @@ Speaker notes:
 
 # We stopped programming against `object`
 
-<div class="callout">`List<Customer>` is not just safer than `ArrayList` — it communicates intent.</div>
+<div class="callout"><code>List&lt;Customer&gt;</code> is not just safer than <code>ArrayList</code> — it communicates intent.</div>
 
 <!--
 Speaker notes:
