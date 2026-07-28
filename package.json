@@ -1,0 +1,13 @@
+{
+  "name": "the-code-we-dont-write-anymore",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "pptx": "marp slides/deck.md --theme slides/theme.css --pptx --allow-local-files -o The-Code-We-Dont-Write-Anymore.pptx",
+    "pdf": "marp slides/deck.md --theme slides/theme.css --pdf --allow-local-files -o The-Code-We-Dont-Write-Anymore.pdf",
+    "html": "marp slides/deck.md --theme slides/theme.css --html --allow-local-files -o The-Code-We-Dont-Write-Anymore.html"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "latest"
+  }
+}
