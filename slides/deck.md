@@ -180,7 +180,8 @@ Customer customer =
 <span class="compare-label">New default</span>
 
 ```csharp
-List<Customer> items = new();
+List<Customer> items =
+    new List<Customer>();
 items.Add(new Customer("Ada"));
 
 Customer customer = items[0];
@@ -311,7 +312,7 @@ Speaker notes:
 # Before LINQ: loops first
 
 ```csharp
-List<Customer> preferred = new();
+List<Customer> preferred = new List<Customer>();
 
 foreach (Customer customer in customers)
 {
@@ -724,8 +725,10 @@ var (name, total) = GetCustomerSummary(id);
 
 <!--
 Speaker notes:
-- Pattern matching begins here.
+- Pattern matching begins here. Both samples on this slide are C# 7 (2017).
 - Tuples make lightweight returns feel normal.
+- Flag the span up front: this three-slide beat crosses two releases. C# 7 opens pattern matching; C# 8 finishes the thought two years later by turning `switch` into an expression.
+- That gap is the argument, not a footnote — intent arrived one release at a time.
 -->
 
 ---
@@ -761,6 +764,7 @@ return shape switch
 
 <!--
 Speaker notes:
+- Name the version here: the switch expression is C# 8 (2019), two years after the `is` pattern on the previous slides.
 - This introduces the path toward modern pattern matching and unions.
 -->
 
@@ -829,7 +833,8 @@ Speaker notes:
 ```csharp
 public Order CreateOrder(Customer customer, Address? shippingAddress)
 {
-    ArgumentNullException.ThrowIfNull(customer);
+    if (customer is null)
+        throw new ArgumentNullException(nameof(customer));
 
     return shippingAddress is null
         ? Order.Pickup(customer)

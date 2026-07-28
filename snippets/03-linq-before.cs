@@ -1,4 +1,4 @@
-List<Customer> preferred = new();
+List<Customer> preferred = new List<Customer>();
 
 foreach (Customer customer in customers)
 {

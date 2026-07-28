@@ -1,6 +1,7 @@
 public Order CreateOrder(Customer customer, Address? shippingAddress)
 {
-    ArgumentNullException.ThrowIfNull(customer);
+    if (customer is null)
+        throw new ArgumentNullException(nameof(customer));
 
     return shippingAddress is null
         ? Order.Pickup(customer)
