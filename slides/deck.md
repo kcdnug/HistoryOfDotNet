@@ -1302,15 +1302,41 @@ Speaker notes:
 
 # Collection expressions made shape lighter
 
+<div class="columns">
+<div>
+<span class="compare-label">Old default</span>
+
+```csharp
+int[] numbers =
+    new int[] { 1, 2, 3, 4 };
+
+List<string> names =
+    new List<string>
+    {
+        "Ada", "Grace", "Barbara"
+    };
+```
+</div>
+<div>
+<span class="compare-label">New default</span>
+
 ```csharp
 int[] numbers = [1, 2, 3, 4];
 
-List<string> names = ["Ada", "Grace", "Barbara"];
+List<string> names =
+    ["Ada", "Grace", "Barbara"];
 ```
+</div>
+</div>
 
 <!--
 Speaker notes:
-- Another quality-of-life feature.
+- Same two collections on both sides. Only the way you write the literal changed.
+- Constraint: initializer syntax was tied to the target type. Bare `{ 1, 2, 3 }` only worked when you were initializing an array. Everything else needed `new T { ... }`, and that only compiled if the type exposed a matching `Add`. `Span<T>` needed `stackalloc`, `ImmutableArray<T>` needed a factory call.
+- So the same data took a different shape depending on what you were assigning it to. That is the thing that went away.
+- Collection expressions are target-typed. The identical `[...]` becomes an array, a `List<T>`, a `Span<T>`, a `ReadOnlySpan<T>` or an `ImmutableArray<T>` based on the destination.
+- The part that is not just brevity: for a `ReadOnlySpan<T>` of constants the compiler can emit the data straight into the assembly and hand you a window onto it — no heap allocation at all. Shorter to write and better codegen than what it replaced.
+- Spread is worth ten seconds too: `[..first, ..second, extra]` retired a lot of `Concat` chains.
 - The language keeps making common shapes easier to read.
 -->
 
