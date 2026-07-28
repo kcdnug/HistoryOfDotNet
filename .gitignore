@@ -1,1 +1,9 @@
 export/*
+node_modules/
+
+.claude/
+
+# Marp exports (npm run pptx/pdf/html)
+The-Code-We-Dont-Write-Anymore.pptx
+The-Code-We-Dont-Write-Anymore.pdf
+The-Code-We-Dont-Write-Anymore.html

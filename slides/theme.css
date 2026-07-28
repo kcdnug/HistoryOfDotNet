@@ -14,6 +14,7 @@
 }
 
 section {
+  color-scheme: dark;
   background: radial-gradient(circle at 15% 10%, #1d2742 0%, var(--bg) 42%, #090d16 100%);
   color: var(--fg);
   font-family: 'Aptos', 'Segoe UI', 'Inter', Arial, sans-serif;

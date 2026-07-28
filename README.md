@@ -15,14 +15,26 @@ This package contains an AI-editable Marp slide deck for the talk **The Code We 
 
 ## Recommended workflow
 
-Use the VS Code **Marp for VS Code** extension for live preview. The deck is intentionally plain Markdown so another AI agent can edit it safely.
-
-To export with Marp CLI:
+Install dependencies once:
 
 ```bash
-npm install -g @marp-team/marp-cli
-marp slides/deck.md --theme slides/theme.css --pptx --allow-local-files -o The-Code-We-Dont-Write-Anymore.pptx
-marp slides/deck.md --theme slides/theme.css --pdf --allow-local-files -o The-Code-We-Dont-Write-Anymore.pdf
+npm install
+```
+
+Then start a live preview at <http://localhost:8080>:
+
+```bash
+npm start
+```
+
+The preview re-renders automatically when `slides/deck.md` or `slides/theme.css` changes. The VS Code **Marp for VS Code** extension also works if you prefer previewing inside the editor. The deck is intentionally plain Markdown so another AI agent can edit it safely.
+
+To export:
+
+```bash
+npm run pptx
+npm run pdf
+npm run html
 ```
 
 Speaker notes are stored as HTML comments directly under each slide. In Marp presenter mode, they appear as notes.

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "marp slides --server --watch --theme-set slides/theme.css",
     "pptx": "marp slides/deck.md --theme slides/theme.css --pptx --allow-local-files -o The-Code-We-Dont-Write-Anymore.pptx",
     "pdf": "marp slides/deck.md --theme slides/theme.css --pdf --allow-local-files -o The-Code-We-Dont-Write-Anymore.pdf",
     "html": "marp slides/deck.md --theme slides/theme.css --html --allow-local-files -o The-Code-We-Dont-Write-Anymore.html"
