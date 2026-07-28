@@ -666,29 +666,33 @@ Speaker notes:
 <span class="compare-label">Old assumption</span>
 
 ```csharp
-var path =
-    ConfigurationManager
-        .AppSettings["ExportPath"];
+var root = (string)Registry.LocalMachine
+    .OpenSubKey(@"SOFTWARE\Contoso")
+    .GetValue("ExportPath");
 
-Process.Start("notepad.exe", path);
+var file = Path.Combine(
+    root, name + ".csv");
 ```
 </div>
 <div>
 <span class="compare-label">New assumption</span>
 
 ```csharp
-var path = options.ExportPath;
+var root = options.Value.ExportPath;
 
-await fileStore.SaveAsync(
-    path, content);
+var file = Path.Combine(
+    root, $"{name}.csv");
 ```
 </div>
 </div>
 
 <!--
 Speaker notes:
-- The sample is intentionally broad: config and OS assumptions changed.
-- Modern code tends to abstract environment dependencies earlier.
+- Same operation on both sides: resolve a configured export path, then build a file path under it.
+- Both sides use Path.Combine, deliberately. It has been correct since Framework 1.0 and it was always separator-aware. The old code here is not doing anything wrong.
+- The one thing that changed is where configuration comes from. The registry is machine-wide, Windows-only, and outside the deployment. Options are injected from wherever they came from — appsettings.json, environment variables, a key vault — and travel with the app.
+- Registry-based configuration was ordinary enterprise practice. It was the durable, machine-wide place to put settings on the only OS you targeted.
+- The assumption that broke was not an API choice. It was that there would be a registry at all.
 -->
 
 ---
